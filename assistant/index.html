@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="fa" dir="rtl" data-theme="auto">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>دستیار من — AI personal assistant</title>
+    <meta name="description" content="دستیار شخصی هوشمند: کار، یادآوری، یادداشت، تقویم، عادت، بودجه، روزنگار، سلامت و ابزارها — همه روی دستگاه خودت." />
+    <meta name="theme-color" content="#4f7cff" />
+    <meta name="color-scheme" content="light dark" />
+    <link rel="manifest" href="./manifest.webmanifest" />
+    <link rel="icon" href="./icons/icon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="./icons/icon-192.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;700;800&display=swap" rel="stylesheet" />
+    <style>
+      html {
+        background: #f4f6fb;
+      }
+      html[data-theme='dark'] {
+        background: #0b0e15;
+      }
+      @media (prefers-color-scheme: dark) {
+        html[data-theme='auto'] {
+          background: #0b0e15;
+        }
+      }
+      #boot {
+        position: fixed;
+        inset: 0;
+        display: grid;
+        place-items: center;
+        font-family: 'Vazirmatn', system-ui, sans-serif;
+        color: #6b7488;
+        gap: 10px;
+      }
+      #boot i {
+        display: block;
+        width: 34px;
+        height: 34px;
+        border-radius: 50%;
+        border: 3px solid #4f7cff;
+        border-top-color: transparent;
+        animation: bootspin 0.9s linear infinite;
+        margin-inline: auto;
+      }
+      @keyframes bootspin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root"></div>
+    <div id="boot"><div><i></i><div style="text-align:center;font-size:13px;margin-top:8px">در حال آماده‌سازی…</div></div></div>
+    <script type="module" src="/src/main.tsx"></script>
+    <script>
+      // remove the boot screen once React mounts
+      new MutationObserver(function (_, o) {
+        if (document.querySelector('#root')?.children.length) {
+          document.getElementById('boot')?.remove();
+          o.disconnect();
+        }
+      }).observe(document.getElementById('root'), { childList: true });
+    </script>
+  </body>
+</html>

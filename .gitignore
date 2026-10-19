@@ -1,0 +1,19 @@
+# deps & build output
+node_modules/
+dist/
+dist-ssr/
+*.tsbuildinfo
+.vite/
+
+# local env / secrets (the BYO model key lives in localStorage, never in a file)
+.env
+.env.*
+!.env.example
+
+# editor & OS noise
+.DS_Store
+.idea/
+.vscode/*
+!.vscode/extensions.json
+*.log
+npm-debug.log*
