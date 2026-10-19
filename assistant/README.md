@@ -7,7 +7,7 @@ Type one sentence in any mix of Persian and English. It is parsed into a task, n
 ```bash
 npm install
 npm run dev        # http://localhost:5173  (fa, RTL)
-npm test           # 49 parser assertions + a Jalali-calendar conformance sweep
+npm test           # 4 suites: parser · Jalali engine · parse→apply→store · view render
 npm run build      # tsc --noEmit && vite build
 npm run preview    # serve the production bundle
 ```
@@ -71,7 +71,16 @@ State never leaves the browser: `localStorage` key `pa:v1`, export/import as a s
 
 ## 3. Editing safely
 
-- `npm test` guards the parser. Add a case whenever you change a rule in `src/lib/nl.ts` — it is the only layer with real ambiguity.
+`npm test` runs four suites, each a plain node script in `scripts/` with no test framework:
+
+| script | guards |
+| --- | --- |
+| `test:parser` | 49 sentences → intent assertions (`nl-check.mjs`) |
+| `test:jalali` | known Nowruz/Yalda dates, 7 671 days round-tripped, month lengths vs year lengths, cross-checked against the runtime's own Persian calendar (`jalali-check.mjs`) |
+| `test:apply` | sentence → parse → apply → store: the row that actually gets written, including navigation and timer hand-off (`apply-check.mjs`) |
+| `test:render` | every view mounted with seeded data in fa and en, failing on `NaN` / `undefined` / `Invalid Date` / a crash (`render-check.mjs`) |
+
+Add a case whenever you change a rule in `src/lib/nl.ts` — it is the only layer with real ambiguity.
 - `npm run build` type-checks with `strict` + `noUnusedLocals`; `applyIntent` and `describe` must stay in sync with the `Intent` union in `nl.ts`.
 - `src/lib/*.ts` must stay free of DOM/React imports so the test harness can compile them on their own.
 - Timestamps are stored as ISO strings but always *read* in local time; the parser builds them with `setHours` on a local `Date`, so keep it that way.

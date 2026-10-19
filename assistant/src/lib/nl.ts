@@ -398,13 +398,15 @@ function detectKind(n: string, now: Date): Intent['kind'] {
   const has = (re: RegExp) => re.test(n);
   const num = /\d/.test(n);
   if (/^(?:برو\s+به|برو\s+توی|برو\s+سمت|باز\s+کن|نمایش\s+بده|برو\s+روی|go\s+to|open\s|show\s+me)\s/i.test(n)) return 'open';
+  if (/[؟?]\s*$/.test(n) && !/^(?:ثبت|خرید|خرج)/i.test(n)) return 'ask';
   if (
     has(/(?:تایمر|پومودورو|زمان.?سنج|timer|pomodoro|focus\s+session)/i) ||
     (has(/(?:فوکوس|کار\s*متمرکز|focus)/iu) && /\d/.test(n) && !has(/(?:یادآوری|reminder|جلسه)/i))
   )
     return 'timer';
   if (has(/(?:انجامش\s*بده|انجام\s*بده|تمامش\s*کن|تمام\s*کن|انجام\s*شد|ختم\s*کن|علامت\s*بزن|complete|mark\s+done|mark\s+as\s+done|finish)/i) && !has(/(?:خرج|هزینه|پول)/i)) return 'complete';
-  if (has(/(?:لیوان|glass|cup|آب)/i) && has(/(?:خوردم|نوشیدم|نوشیدم|خورم|ثبت|add|log|\+\s*\d)/i)) return 'health';
+  if (has(/(?:لیوان|glass(?:es)?|\bcups?\b|جام)/iu) && has(/(?:آب|نوش|drink|water|هیدرات)/i) && !has(/(?:خرید|بخر|buy|فروش|قیمت|خرج)/i)) return 'health';
+  if (has(/(?:آب|water)/i) && has(/(?:خوردم|نوشیدم|خورم|ثبت|add|log|\+\s*\d)/i) && !has(/(?:خرید|بخر|buy|خرج)/i)) return 'health';
   if (has(/(?:خواب|sleep)/i) && (num || has(/(?:ساعت|quality|کیفیت)/i)) && !has(/(?:یادآوری|reminder)/i)) return 'health';
   if (has(/(?:قدم|steps|پیمایش|راه\s+رفتم)/i) && num) return 'health';
   if (has(/(?:وزن|weight|کیلو)/i) && num && !has(/(?:خرج|هزینه|قیمت)/i)) return 'health';
@@ -431,7 +433,6 @@ function detectKind(n: string, now: Date): Intent['kind'] {
   )
     return 'event';
   if (has(/^(?:ثبت|افزودن|اضافه|یه?\s*کار|کار\s*جدید|add|new|create|todo|task|تسک)/i)) return 'task';
-  if (/[؟?]\s*$/.test(n)) return 'ask';
   if (has(/(?:چرا|چطور|چگونه|چیه|چطورم|چند|آیا|ایا|می‌تونم|میشه|چیکار|بگو|پیشنهاد|نظر|کمک|انگیزه|motiv|why|how|what|when|which|where|can\s+i|should\s+i|idea|advice|help)/i)) return 'ask';
   return 'task';
 }

@@ -9,9 +9,11 @@
     "build": "tsc --noEmit && vite build",
     "preview": "vite preview --host 0.0.0.0",
     "typecheck": "tsc --noEmit",
-    "test": "node scripts/nl-check.mjs && node scripts/jalali-check.mjs",
+    "test": "node scripts/nl-check.mjs && node scripts/jalali-check.mjs && node scripts/apply-check.mjs && node scripts/render-check.mjs",
     "test:parser": "node scripts/nl-check.mjs",
-    "test:jalali": "node scripts/jalali-check.mjs"
+    "test:jalali": "node scripts/jalali-check.mjs",
+    "test:apply": "node scripts/apply-check.mjs",
+    "test:render": "node scripts/render-check.mjs"
   },
   "dependencies": {
     "react": "^19.3.1",

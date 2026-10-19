@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { Bars, Card, Field, Icon, Progress, Ring, Spark, useToast } from '../components/ui';
 import type { HealthLog } from '../store/store';
 import { useApp } from '../store/store';
-import { addDays, formatJalaliShort, localizeDigits, startOfDay, ymd } from '../lib/date';
+import {addDays, formatJalaliShort, localizeDigits, startOfDay, ymd, toFaDigits } from '../lib/date';
 import { useActions } from '../components/actions';
 
 /* =====================================================================
@@ -63,8 +63,8 @@ export function Health() {
             </div>
             <div className="row tight">
               {[1, 2].map((n) => (
-                <button key={n} className="btn sm" onClick={() => { set({ water: (log.water ?? 0) + n }); push(`💧 +${n}`, 'success'); }}>
-                  +{n}
+                <button key={n} className="btn sm" onClick={() => { set({ water: (log.water ?? 0) + n }); push(`💧 +${lang === 'fa' ? toFaDigits(n) : n}`, 'success'); }}>
+                  +{lang === 'fa' ? toFaDigits(n) : n}
                 </button>
               ))}
               <button className="icon-btn" onClick={() => set({ water: Math.max(0, (log.water ?? 0) - 1) })}>

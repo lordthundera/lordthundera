@@ -107,7 +107,8 @@ export function formatJalali(d: Date | string, opts: { weekday?: boolean; year?:
   const j = jdOf(x);
   const label = `${JALALI_MONTHS_FA[j.jm - 1]} ${j.jd}, ${j.jy}`;
   const wd = opts.weekday === false ? '' : `${WEEKDAYS_FA[faWeekday(x)]}، `;
-  return opts.year === false ? `${wd}${JALALI_MONTHS_FA[j.jm - 1]} ${j.jd}` : `${wd}${label}`;
+  // the Jalali label is Persian by definition → Persian digits throughout
+  return toFaDigits(opts.year === false ? `${wd}${JALALI_MONTHS_FA[j.jm - 1]} ${j.jd}` : `${wd}${label}`);
 }
 
 export function formatJalaliShort(d: Date | string): string {
