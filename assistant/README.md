@@ -4,13 +4,44 @@
 
 Type one sentence in any mix of Persian and English. It is parsed into a task, note, event, expense, habit, health log, timer or navigation — then applied, with undo. Everything lives in `localStorage`; the app works fully offline as a PWA.
 
+## 0. اجرا در ۳ دقیقه · Quick start
+
+**۰.۱ Node لازم است.** در ترمینال بزن `node -v`. اگر عددی ندیدی یا زیر ۲۰ بود، از <https://nodejs.org> نسخهٔ LTS (۲۲) را نصب کن — `npm` هم با آن می‌آید. (روی ویندوز: Node را نصب کن، بعد **Terminal / PowerShell** را دوباره باز کن.)
+
+**۰.۲ کد را بگیر و نصب کن:**
+
 ```bash
+git clone https://github.com/lordthundera/lordthundera.git
+cd lordthundera/assistant
 npm install
-npm run dev        # http://localhost:5173  (fa, RTL)
-npm test           # 4 suites: parser · Jalali engine · parse→apply→store · view render
-npm run build      # tsc --noEmit && vite build
-npm run preview    # serve the production bundle
 ```
+
+**۰.۳ اجرا کن:**
+
+```bash
+npm run dev
+```
+
+آخرش آدرسی می‌نویسد → همان را در مرورگر باز کن: **http://localhost:5173** (فارسی، راست‌به‌چپ). برای بستن `Ctrl+C`.
+
+**۰.۴ اولین قدم‌ها داخل اپ:** روی `⌘K` (مک) یا `Ctrl+K` (ویندوز/لینوکس) بزن و این‌ها را یکی‌یکی تایپ کن — هر خط یک فرمان است و قبل از ثبت، پیش‌نمایشش را می‌بینی:
+
+```
+خرید شیر و پنیر فردا !!! #خانه
+خرج ناهار ۲۵۰ هزار تومان
+یادداشت: ایدهٔ اپ موبایل
+فردا ساعت ۹ جلسه با تیم محصول
+۳ لیوان آب خوردم
+تایمر ۲۵ دقیقه
+تولد مامان ۱۲ اسفند
+برو به یادداشت‌ها
+```
+
+بعد از هر فرمان `Enter` بزن؛ اگر اشتباه بود `Ctrl+Z` (یا دکمهٔ «برگشت» در نوار بالا) آخرین کار را برمی‌گرداند. برای دیدن بقیهٔ بخش‌ها از منوی کناری استفاده کن؛ اگر خواستی با دادهٔ واقعی نگاه کنی، در **Settings** دکمهٔ 🎁 «دادهٔ نمونه» همه‌چیز را پر می‌کند.
+
+**۰.۵ روی گوشی:** همان وای‌فای کامپیوتر → اگر آدرس شبکه را در همان خروجی `npm run dev` دیدی (مثلاً `http://192.168.1.20:5173/`) در مرورگر گوشی باز کن. برای نصب به‌صورت اپ: منوی مرورگر → *Add to Home screen* / *Install app*. (میکروفن و نوتیفیکیشن فقط روی `localhost` یا HTTPS کار می‌کنند.)
+
+**۰.۶ بکاپ و انتقال:** تنظیمات ← *خروجی JSON* یک فایل می‌دهد؛ *ورود* همان را برمی‌گرداند. داده‌ها فقط در `localStorage` همان مرورگرند (`pa:v1`)، پس پاک‌کردن دادهٔ مرورگر = پاک‌شدن همه‌چیز. اول خروجی بگیر.
 
 ---
 
@@ -88,3 +119,35 @@ Add a case whenever you change a rule in `src/lib/nl.ts` — it is the only laye
 ## 4. Notes on the stack
 
 React 19 + Vite + TypeScript, no other runtime dependency — styling is one `styles.css`, icons are inline SVG paths in `components/ui.tsx`. The service worker caches the shell and never intercepts cross-origin requests, so a BYO-key model endpoint keeps working. To ship it anywhere, `npm run build` and drop `dist/` on any static host; it must be served over HTTPS (or localhost) for notifications, mic and the service worker.
+
+---
+
+## 5. نسخهٔ تولید و استقرار · Build & deploy
+
+```bash
+npm run build      # → dist/ (tsc --noEmit && vite build)
+npm run preview    # همان dist را محلی سرو می‌کند: http://localhost:4173
+```
+
+`dist/` کاملاً آفلاین و subpath-safe است (assets با مسیر نسبی)، پس هر جایی که بگذاری کار می‌کند:
+
+| مقصد | چطور |
+| --- | --- |
+| GitHub Pages (پروژه) | `dist/` را در شاخهٔ `gh-pages` (یا `docs/`) بگذار — لازم نیست `base` را عوض کنی، چون `base: './'` تنظیم شده |
+| Netlify / Vercel / Cloudflare Pages | پوشهٔ `assistant` را وصل کن، build command `npm run build` و output dir `dist` |
+| هر سرور استاتیک / پوشهٔ مشترک | محتوای `dist` را کپی کن؛ همین |
+| فقط روی خودت | `dist/index.html` را با مرورگر باز کن می‌شود؛ ولی برای PWA/میکروفن HTTPS لازم است |
+
+## 6. عیب‌یابی · Troubleshooting
+
+| نشانه | کار |
+| --- | --- |
+| `tsc: not found` یا `vite: not found` | `npm install` را داخل `assistant` اجرا کن (نه ریشهٔ ریپو) |
+| `npm run dev` می‌گوید پورت مشغول است | `npm run dev -- --port 5174` |
+| صفحه سفید بعد از build | نسخهٔ قدیمیِ `dist`؛ `rm -rf dist && npm run build` |
+| میکروفن/نوتیفیکیشن کار نمی‌کند | باید `localhost` یا HTTPS باشد؛ روی IP محلی با HTTP، مرورگر اجازه نمی‌دهد |
+| فارسی/اعداد انگلیسی است | Settings ← زبان «فارسی»؛ RTL و اعداد فارسی با آن می‌آید |
+| همه‌چیز غیب شده | داده در `localStorage` همان پروفایل مرورگر است؛ با پروفایل/مرورگر دیگر باز کردی. تنظیمات ← بازیابی از فایل JSON |
+| می‌خواهی از صفر شروع کنی | Settings ← «پاک‌کردن داده‌ها» (یا DevTools → Application → Local Storage → کلید `pa:v1`) |
+
+تست‌ها (هیچ فریم‌ورکی لازم ندارد): `npm test` یا تک‌تک `npm run test:parser` · `test:jalali` · `test:apply` · `test:render`.
