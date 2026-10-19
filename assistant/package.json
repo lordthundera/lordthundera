@@ -1,0 +1,27 @@
+{
+  "name": "my-personal-ai-assistant",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "description": "دستیار شخصی هوشمند — local-first AI personal assistant (tasks, notes, calendar, habits, money, journal, focus, tools).",
+  "scripts": {
+    "dev": "vite --host 0.0.0.0",
+    "build": "tsc --noEmit && vite build",
+    "preview": "vite preview --host 0.0.0.0",
+    "typecheck": "tsc --noEmit",
+    "test": "node scripts/nl-check.mjs && node scripts/jalali-check.mjs",
+    "test:parser": "node scripts/nl-check.mjs",
+    "test:jalali": "node scripts/jalali-check.mjs"
+  },
+  "dependencies": {
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1"
+  },
+  "devDependencies": {
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "@vitejs/plugin-react": "^6.1.2",
+    "typescript": "^7.0.2",
+    "vite": "^8.3.4"
+  }
+}
